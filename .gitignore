@@ -1,3 +1,10 @@
+# Ignore all data files (raw, interim, processed)
+data/
+
+# Ignore all generated outputs (figures, tables)
+results/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
