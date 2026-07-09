@@ -1,8 +1,21 @@
-# Ignore all data files (raw, interim, processed)
-data/
+# Raw source data and other-cancer TSVs (multi-GB; re-download from Xena Hub, see README)
+data/raw/
+data/others/
 
-# Ignore all generated outputs (figures, tables)
-results/
+# Large derived data (regenerate via notebooks/01_preprocessing.ipynb)
+data/processed/*.parquet
+
+# Fitted models (regenerate via notebooks/02-1_clustering_pca.ipynb)
+models/*.joblib
+
+# macOS
+.DS_Store
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Claude Code session artifacts
+.claude/
 
 
 # Byte-compiled / optimized / DLL files

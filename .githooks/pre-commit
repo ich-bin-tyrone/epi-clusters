@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Blocks any commit that stages a file over 100MB (GitHub hard-rejects >100MB pushes anyway).
+# Enable with: git config core.hooksPath .githooks
+
+MAX_BYTES=$((100 * 1024 * 1024))
+offenders=()
+
+while IFS= read -r -d '' file; do
+  [ -f "$file" ] || continue
+  size=$(wc -c < "$file" | tr -d ' ')
+  if [ "$size" -gt "$MAX_BYTES" ]; then
+    human=$(du -h "$file" | cut -f1)
+    offenders+=("  $file ($human)")
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM -z)
+
+if [ ${#offenders[@]} -gt 0 ]; then
+  echo "ERROR: commit blocked -- the following staged files exceed 100MB:"
+  printf '%s\n' "${offenders[@]}"
+  echo ""
+  echo "Add them to .gitignore instead, or use Git LFS if they must be tracked."
+  exit 1
+fi
+
+exit 0
